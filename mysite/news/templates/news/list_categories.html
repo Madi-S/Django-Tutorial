@@ -1,0 +1,10 @@
+<div class="list-group">
+    {% comment %}
+    {{ arg1 }} {{ arg2 }}
+    {% endcomment %}
+    {% for category in categories %}
+    <a href="{{ category.get_absolute_url }}" class="list-group-item list-group-item-action">
+        {{ category.title }}
+    </a>
+    {% endfor %}
+</div>
