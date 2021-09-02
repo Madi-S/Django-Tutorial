@@ -36,15 +36,23 @@ class NewsByCategory(ListView):
         return News.objects.filter(is_published=True, category=self.kwargs['category_id']).all()
 
 
-class DetailNews(DetailView):
-    model = News
+# class DetailNews(DetailView):
+#     model = News
 
-    def get_context_data(self, *args, object_list=None, **kwargs):
-        context = super().get_context_data(**kwargs)
+#     def get_context_data(self, *args, object_list=None, **kwargs):
+#         context = super().get_context_data(**kwargs)
 
-        news_item = News.objects.get(pk=self.kwargs['pk'])
-        context['title'] = news_item.title
-        return context
+#         news_item = News.objects.get(pk=self.kwargs['pk'])
+#         context['title'] = news_item.title
+#         return context
+
+def view_news(request, news_id):
+    news_item = get_object_or_404(News, pk=news_id)
+    context = {
+        'news_item': news_item,
+        'title': news_item.title
+    }
+    return render(request, 'news/view_news.html', context)
 
 
 # def _index(request):
@@ -65,15 +73,6 @@ class DetailNews(DetailView):
 #         'category': category
 #     }
 #     return render(request, 'news/category.html', context)
-
-
-# def _view_news(request, news_id):
-#     news_item = get_object_or_404(News, pk=news_id)
-#     context = {
-#         'news_item': news_item,
-#         'title': news_item.title
-#     }
-#     return render(request, 'news/view_news.html', context)
 
 
 def add_news(request):
