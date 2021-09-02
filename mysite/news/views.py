@@ -1,4 +1,5 @@
-from django.views.generic import ListView, DetailView
+from django.urls import reverse_lazy
+from django.views.generic import ListView, DetailView, CreateView
 from django.shortcuts import render, get_object_or_404, redirect
 
 from .forms import NewsForm
@@ -36,6 +37,12 @@ class NewsByCategory(ListView):
         return News.objects.filter(is_published=True, category=self.kwargs['category_id']).all()
 
 
+class CreateNews(CreateView):
+    form_class = NewsForm
+    template_name = 'news/add_news.html'
+    success_url = reverse_lazy('home')
+
+
 # class DetailNews(DetailView):
 #     model = News
 
@@ -45,6 +52,7 @@ class NewsByCategory(ListView):
 #         news_item = News.objects.get(pk=self.kwargs['pk'])
 #         context['title'] = news_item.title
 #         return context
+
 
 def view_news(request, news_id):
     news_item = get_object_or_404(News, pk=news_id)
