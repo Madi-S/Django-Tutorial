@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+
+{% block title %}
+{{ title }} - {{ block.super }}
+{% endblock %}
+
+{% block sidebar %}
+{% include 'inc/_sidebar.html' %}
+{% endblock %}
+
+{% block content %}
+
+<div class="card mb-3">
+    <div class="card-header">
+        Category: <a href="{{ object.category.get_absolute_url }}">{{ object.category.title }}</a>
+        {{ forloop.counter }}
+    </div>
+    <div class="card-body">
+        <div class="media">
+            {% if object.photo %}
+            <img class="mr-3" height="400" src="{{ object.photo.url }}" alt="">
+            {% else %}
+            <img src="https://picsum.photos/400?random=1" />
+            {% endif %}
+            <div class="media-body">
+                <h5 class="card-title">{{ object.title }}</h5>
+                {% autoescape off %}
+                <p class="card-text">{{ object.content }}</p>
+                {% endautoescape %}
+            </div>
+        </div>
+    </div>
+    <div class="card-footer text-muted">
+        {{ object.created_at|date:'Y-m-d H:i' }}
+    </div>
+</div>
+
+{% endblock %}
