@@ -43,18 +43,27 @@ class CreateNews(CreateView):
     success_url = reverse_lazy('home')
 
 
-# class DetailNews(DetailView):
-#     model = News
+class DetailNews(DetailView):
+    model = News
 
-#     def get_context_data(self, *args, object_list=None, **kwargs):
-#         context = super().get_context_data(**kwargs)
+    def get_context_data(self, *args, object_list=None, **kwargs):
+        context = super().get_context_data(**kwargs)
 
-#         news_item = News.objects.get(pk=self.kwargs['pk'])
-#         context['title'] = news_item.title
-#         return context
+        news_item = News.objects.get(pk=self.kwargs['pk'])
+        context['title'] = news_item.title
+        return context
 
 
-def view_news(request, news_id):
+def _index(request):
+    news = News.objects.filter(is_published=True).all()
+    context = {
+        'news': news,
+        'title': 'Home'
+    }
+    return render(request, 'news/index.html', context)
+
+
+def _view_news(request, news_id):
     news_item = get_object_or_404(News, pk=news_id)
     context = {
         'news_item': news_item,
@@ -63,27 +72,18 @@ def view_news(request, news_id):
     return render(request, 'news/view_news.html', context)
 
 
-# def _index(request):
-#     news = News.objects.filter(is_published=True).all()
-#     context = {
-#         'news': news,
-#         'title': 'Home'
-#     }
-#     return render(request, 'news/index.html', context)
+def _get_category(request, category_id):
+    category = get_object_or_404(Category, pk=category_id)
+    news = News.objects.filter(category_id=category_id).all()
+    context = {
+        'news': news,
+        'title': category.title,
+        'category': category
+    }
+    return render(request, 'news/category.html', context)
 
 
-# def _get_category(request, category_id):
-#     category = get_object_or_404(Category, pk=category_id)
-#     news = News.objects.filter(category_id=category_id).all()
-#     context = {
-#         'news': news,
-#         'title': category.title,
-#         'category': category
-#     }
-#     return render(request, 'news/category.html', context)
-
-
-def add_news(request):
+def _add_news(request):
     if request.method == 'POST':
         form = NewsForm(request.POST)
         if form.is_valid():

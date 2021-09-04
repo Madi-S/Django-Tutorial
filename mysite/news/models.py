@@ -28,7 +28,7 @@ class News(models.Model):
         return f'News {self.id}: {self.title}'
 
     def get_absolute_url(self):
-        return reverse_lazy('view_news', kwargs={'news_id': self.pk})
+        return reverse_lazy('view_news', kwargs={'pk': self.pk})
 
     class Meta:
         verbose_name = 'News Item'
