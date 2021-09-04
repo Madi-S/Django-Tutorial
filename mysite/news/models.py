@@ -22,7 +22,7 @@ class News(models.Model):
     is_published = models.BooleanField(
         default=True, verbose_name='Published status')
     category = models.ForeignKey(
-        'Category', on_delete=models.PROTECT)
+        'Category', on_delete=models.PROTECT, related_name='news')
 
     def __str__(self):
         return f'News {self.id}: {self.title}'
@@ -54,28 +54,30 @@ class Category(models.Model):
 
 
 '''
+RELATIONSHIPS:
+
+>>> cat4 = Category.objects.get(pk=4)
+>>> cat4.news_set.all().reverse() 
+news_set can be renamed in `related_name` argument for ForeignKey
+
+
 DELETE objects:
 
 >>> news_5 = News.objects.get(pk=5)
 >>> news_5.delete()
 (1, {'news.News': 1})
-'''
 
 
-'''
 UPDATE objects:
 
 >>> news_3 = News.objects.get(pk=3)
 >>> news_3.title = 'Title modified 3'
 >>> news_3.save()
-'''
 
 
-'''
 QUERY objects:
 
 >>> News.objects.all()
-
 >>> News.objects.filter(title='Title 4')
 
 >>> News.objects.get(pk=5)
@@ -89,9 +91,8 @@ raises exception when 0 or > 1 records
 
 >>> News.objects.exclude(title='Title 4')
 get all objects except for
-'''
 
-'''
+
 CREATE db objects:
 
 >>> obj = News(title='Title', content='Some content', ...)
@@ -107,18 +108,14 @@ or
 or without saving
 
 >>> obj = News.objects.create(title='Title 4', content='Content 4')
-'''
 
 
-'''
-LAST queries:
+LAST queries history:
 
 >>> from django.db import connection
 >>> connection.queries
-'''
 
 
-'''
 MIGRATIONS:
 
 1)  python manage.py makemigrations (optionally specify project name: news)
