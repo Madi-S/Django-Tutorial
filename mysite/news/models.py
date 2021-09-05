@@ -55,6 +55,48 @@ class Category(models.Model):
 
 
 '''
+RAW SQL
+>>> news = News.objects.raw('SELECT * FROM news_news')
+>>> for item in news:
+>>>     print(item)
+
+>>> news = News.objects.raw('SELECT id, title FROM news_news')
+all raw queries must inlcude primary key field
+
+>>> news[0].content
+django can query any fields that are not included in the query string
+but this is not efficient and not recommended
+
+>>> news = News.objects.raw('SELECT * FROM news_news WHERE title = %s', ('My Title',))
+anti sql-injections query
+
+
+SQL FUNCTIONS (RECOMMENDED), CALCULATE TITLE LENGTH:
+>>> from django.db.models.functions import Length
+>>> news = News.objects.annotate(length=Length('title')).first()
+>>> news.length
+
+
+FILTER NEWS, WHICH HAVE TITLE IN THEIR CONTENT (INNER FIELDS REFERENCE):
+>>> News.objects.filter(content__icontains=F('title'))
+
+
+INCREMENT VIEWS COUNT FOR NEWS:
+>>> from django.db.models import F
+>>> news1 = News.objects.first()
+>>> news1.views = F('views') + 1
+>>> news1.save()
+
+
+VALUES (QUERY ONLY NEEDED FIELDS):
+>>> news3 = News.objects.values('title', 'views').get(pk=3)
+returns a dictionary with given fields
+>>> news3['title']      -   'Title modified 3'
+>>> news3['category']   -   error
+
+>>> news = News.objects.values('title', 'views', 'category__title')
+
+
 ANNOTATIONS:
 Get news count for categories
 >>> cats = Category.objects.annotate(news_count=Count('news'))
@@ -77,6 +119,9 @@ Culture 7
 Politics 4
 Science 5
 
+Get count of news with unique views count
+>>> News.objects.aggregate(cnt=Count('views', distinct=True))
+{'cnt': 2}
 
 
 AGGREGATORS:
