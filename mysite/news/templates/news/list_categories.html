@@ -4,7 +4,7 @@
     {% endcomment %}
     {% for category in categories %}
     <a href="{{ category.get_absolute_url }}" class="list-group-item list-group-item-action">
-        {{ category.title }}
+        {{ category.title }} <span class="badge bg-primary"> {{ category.news_count }}</span>
     </a>
     {% endfor %}
 </div>
