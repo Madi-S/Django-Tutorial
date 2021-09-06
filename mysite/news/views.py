@@ -1,19 +1,23 @@
 from django.urls import reverse_lazy
 from django.views.generic import ListView, DetailView, CreateView
 from django.shortcuts import render, get_object_or_404, redirect
+from django.contrib.auth.mixins import LoginRequiredMixin
 
+from .utils import MyMixin
 from .forms import NewsForm
 from .models import Category, News
 
 
-class HomeNews(ListView):
+class HomeNews(MyMixin, ListView):
     model = News
     context_object_name = 'news'
     # extra_context = {'title': 'Home'}
+    mixin_prop = 'hello world'
 
     def get_context_data(self, *args, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
         context['title'] = 'Home Page'
+        context['mixin_prop'] = self.get_prop()
         return context
 
     def get_queryset(self):
@@ -37,10 +41,12 @@ class NewsByCategory(ListView):
         return News.objects.filter(is_published=True, category=self.kwargs['category_id']).select_related('category')
 
 
-class CreateNews(CreateView):
+class CreateNews(LoginRequiredMixin, CreateView):
     form_class = NewsForm
     template_name = 'news/add_news.html'
     success_url = reverse_lazy('home')
+    login_url = reverse_lazy('home')
+    # raise_exception = True
 
 
 class DetailNews(DetailView):
