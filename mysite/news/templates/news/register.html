@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Add News - {{ block.super }}
+{% endblock %}
+
+{% block sidebar %}
+{% include 'inc/_sidebar.html' %}
+{% endblock %}
+
+{% block content %}
+
+<h1>Reigstration</h1>
+
+<form method="POST">
+    {% csrf_token %}
+    {{ form.as_p }}
+
+    <div class="d-grid gap-2">
+        <button type="submit" class="btn btn-primary">Register</button>
+    </div>
+</form>
+
+{% endblock %}
