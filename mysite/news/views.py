@@ -1,31 +1,51 @@
 from django.contrib import messages
 from django.urls import reverse_lazy
 from django.core.paginator import Paginator
+from django.contrib.auth import login, logout
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import render, get_object_or_404, redirect
 from django.views.generic import ListView, DetailView, CreateView
 
 from .utils import MyMixin
 from .models import Category, News
-from .forms import NewsForm, UserRegisterForm
+from .forms import NewsForm, UserRegisterForm, UserLoginForm
 
 
-def register(request):
+def user_register(request):
     if request.method == 'POST':
         form = UserRegisterForm(request.POST)
         if form.is_valid():
-            form.save()
-            messages.success(request, 'Your account has been registered successfully')
-            return redirect('login')
+            user = form.save()
+            login(request, user)
+            messages.success(
+                request, 'Your account has been registered successfully')
+            return redirect('home')
         else:
             messages.error(request, 'Registration failed')
     else:
         form = UserRegisterForm()
-    return render(request, 'news/register.html', context={'form': form})
+    return render(request, 'news/register.html', {'form': form})
 
 
-def login(request):
-    return render(request, 'news/login.html')
+def user_login(request):
+    if request.method == 'POST':
+        form = UserLoginForm(data=request.POST)
+        if form.is_valid():
+            user = form.get_user()
+            login(request, user)
+            messages.success(
+                request, 'You have been logged in successfully')
+            return redirect('home')
+    else:
+        form = UserLoginForm()
+    return render(request, 'news/login.html', {'form': form})
+
+
+def user_logout(request):
+    logout(request)
+    messages.success(
+                request, 'You have been logged out successfully')
+    return redirect('login')
 
 
 def test(request):
