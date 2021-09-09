@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 
 {% block title %}
-Test Page :: {{ block.super }}
+Contact Form :: {{ block.super }}
 {% endblock %}
 
 {% block sidebar %}
@@ -10,11 +10,15 @@ Test Page :: {{ block.super }}
 
 {% block content %}
 
-{% for name in page_obj.object_list %}
+<h1>Contact Form</h1>
 
-<h3>{{ name }}</h3>
-<br>
+<form method="POST">
+    {% csrf_token %}
+    {{ form.as_p }}
 
-{% endfor %}
+    <div class="d-grid gap-2">
+        <button type="submit" class="btn btn-primary">Register</button>
+    </div>
+</form>
 
 {% endblock %}

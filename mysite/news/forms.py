@@ -8,6 +8,18 @@ from .models import Category, News
 
 
 
+class ContactForm(forms.Form):
+    subject = forms.CharField(
+        label='Subject',
+        widget=forms.TextInput(attrs={'class': 'form-control'})
+    )
+    message = forms.CharField(
+        required=False,
+        label='Message',
+        widget=forms.Textarea(attrs={'class': 'form-control', 'rows': 7})
+    )
+
+
 class UserLoginForm(AuthenticationForm):
     username = forms.CharField(
         max_length=150,
