@@ -64,6 +64,8 @@ class UserRegisterForm(UserCreationForm):
         
 
 class NewsForm(forms.ModelForm):
+    captcha = CaptchaField()
+    
     class Meta:
         model = News
         # fields = '__all__'
@@ -104,7 +106,6 @@ class _NewsForm(forms.Form):
         queryset=Category.objects.all(),
         widget=forms.Select(attrs={'class': 'form-select form-select-md mb-3'})
     )
-    captcha = CaptchaField()
 
 
 def str_starts_with_digit(string):

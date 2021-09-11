@@ -7,3 +7,14 @@ body {
     /* list-style-type: none; */
     /* padding: 0; */
 }
+
+img.captcha {
+    margin-left: 10px;
+    width: 115px;
+    height: auto;
+}
+
+#id_captcha_1 {
+    width: 70px;
+    margin-left: 15px;
+}
