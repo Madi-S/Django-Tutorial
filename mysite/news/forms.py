@@ -3,6 +3,7 @@ from django import forms
 from django.core.exceptions import ValidationError
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
+from captcha.fields import CaptchaField
 
 from .models import Category, News
 
@@ -18,6 +19,7 @@ class ContactForm(forms.Form):
         label='Message',
         widget=forms.Textarea(attrs={'class': 'form-control', 'rows': 7})
     )
+    captcha = CaptchaField()
 
 
 class UserLoginForm(AuthenticationForm):
@@ -31,6 +33,7 @@ class UserLoginForm(AuthenticationForm):
         label='Password',
         widget=forms.PasswordInput(attrs={'class': 'form-control'})
     )
+    captcha = CaptchaField()
 
 
 class UserRegisterForm(UserCreationForm):
@@ -53,6 +56,7 @@ class UserRegisterForm(UserCreationForm):
         help_text='Your passwords must match!',
         widget=forms.PasswordInput(attrs={'class': 'form-control'})
     )
+    captcha = CaptchaField()
 
     class Meta:
         model = User
@@ -100,6 +104,7 @@ class _NewsForm(forms.Form):
         queryset=Category.objects.all(),
         widget=forms.Select(attrs={'class': 'form-select form-select-md mb-3'})
     )
+    captcha = CaptchaField()
 
 
 def str_starts_with_digit(string):

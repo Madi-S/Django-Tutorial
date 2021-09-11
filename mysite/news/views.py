@@ -63,7 +63,7 @@ def contacts(request):
             )
             if mail_sent:
                 messages.success(request, 'Email has been sent successfully')
-                return redirect('test')
+                return redirect('home')
             else:
                 messages.error(request, 'Email has not been sent')
     else:

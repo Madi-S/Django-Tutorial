@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     # 'news', # short version (not recommended)
     'debug_toolbar',
     'news.apps.NewsConfig',
+    'captcha',
     'ckeditor',
     'ckeditor_uploader'
 ]
@@ -53,13 +54,14 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    
+
 ]
 
 if DEBUG:
     import mimetypes
     mimetypes.add_type('application/javascript', '.js', True)
-    MIDDLEWARE = ['debug_toolbar.middleware.DebugToolbarMiddleware'] + MIDDLEWARE 
+    MIDDLEWARE = [
+        'debug_toolbar.middleware.DebugToolbarMiddleware'] + MIDDLEWARE
 
 ROOT_URLCONF = 'mysite.urls'
 
