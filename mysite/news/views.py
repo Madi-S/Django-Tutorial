@@ -50,7 +50,7 @@ def user_logout(request):
     return redirect('login')
 
 
-def test(request):
+def contacts(request):
     if request.method == 'POST':
         form = ContactForm(data=request.POST)
         if form.is_valid():
@@ -69,7 +69,7 @@ def test(request):
     else:
         form = ContactForm()
 
-    return render(request, 'news/test.html', {'form': form})
+    return render(request, 'news/contacts.html', {'form': form})
 
 
 class HomeNews(MyMixin, ListView):
